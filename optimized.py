@@ -1,11 +1,8 @@
 import csv
 import time
-
-prix = []
-profit = []
 action = []
-meilleure_action = []
 budget = 500
+meilleure_action = []
 fichier = 'action1.csv'
 
 
@@ -14,53 +11,43 @@ def lire_fichier(fichier):
         fichier = csv.reader(csvfile, delimiter=',')
         next(fichier)
         for ligne in fichier:
-            if int(float(ligne[1])) > 0 and float(ligne[2]):
-                action.append(ligne[0])
-                prix.append(int(float(ligne[1])))
-                profit.append(float(ligne[2]))
-    return prix, profit
+            if int(float(ligne[1])) > 0 and int(float(ligne[2])) > 0:
+                action.append(
+                    (ligne[0], int(float(ligne[1])), int(float(ligne[2])),
+                     int(float(ligne[1])) * int(float(ligne[2]))/100))
+    return action
 
 
-def optimized(valeur):
-    table = [[0 for x in range(budget + 1)] for x in range(valeur + 1)]
-    for i in range(valeur + 1):
-        for j in range(budget + 1):
-            if i == 0 or j == 0:
-                table[i][j] = 0
-            elif prix[i-1] <= j:
-                table[i][j] = max(profit[i-1]
-                                  + table[i-1][j-prix[i-1]],  table[i-1][j])
-
+def optimized(action):
+    n = len(action)
+    w = budget
+    table = [[0 for x in range(w + 1)] for x in range(n + 1)]
+    for i in range(1, n + 1):
+        for w in range(1, w + 1):
+            if action[i - 1][1] <= w:
+                table[i][w] = max((action[i-1][3]) + table[i-1]
+                                  [w - action[i - 1][1]], table[i - 1][w])
             else:
-                table[i][j] = table[i-1][j]
-    prix_total = 0.0
-    i = len(prix)
-    j = 500
-    while (i > 0 and j > 0):
-        if table[i][j] == table[i-1][j-prix[i-1]] + profit[i-1]:
-            prix_total += prix[i-1]
-            j -= prix[i-1]
-            meilleure_action.append((action[i], prix[i], profit[i]))
-        i -= 1
-    meilleur_profit = table[-1][-1]
-
-    return meilleur_profit, prix_total
+                table[i][w] = table[i-1][w]
+    while w >= 0 and n >= 0:
+        if table[n][w] == table[n - 1][w - action[n - 1][1]] + action[n - 1][3]:
+            meilleure_action.append(action[n-1])
+            w -= action[n - 1][1]
+        n -= 1
+    prix = sum([action[1] for action in meilleure_action])
+    return table[-1][-1], meilleure_action, prix
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    list_actions = lire_fichier(fichier)
     start_time = time.time()
-    lire_fichier(fichier)
-    meilleur_profit, prix_total = optimized(
-        len(prix))
-    print("\nMeilleures actions : \n")
-    somme = 0
+    benef, meilleure_action, prix = optimized(action)
+    print(f"Les meilleures actions:\n")
     for ligne in meilleure_action:
-        benif = ligne[1]*ligne[2]/100
-        benif = round(benif, 2)
-        somme += benif
-        print(f"\t{ligne[0]}:\tCoût = {ligne[1]} €\tBénéfice = {benif} €")
-    print(f"\nMontant total : {prix_total}")
-    print(f"\nMontant profit : {somme}")
+        print(f"\t{ligne[0]}:\tCoût = {ligne[1]} €\tBénéfice = {ligne[3]} €")
+    print(f"\nMontant total du bénéfice: {int(benef)} €")
+    print(f"\nMontant total: {prix} €")
     nombre = time.time()-start_time
     print(f"\nTemps d'exécution: {0:.2f}".format(nombre).
           rjust(7), "secondes\n")
+    print(f"Nombre d'actions: {len(meilleure_action)}")
