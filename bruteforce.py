@@ -2,10 +2,10 @@ import csv
 from itertools import combinations
 import time
 
-fichier = 'action1.csv'
+fichier = 'action.csv'
 budget = 500
 profit = 0
-liste = []
+action = []
 combinaisons = []
 BOLD = '\033[1m'
 YELLOW = '\033[93m'
@@ -14,34 +14,34 @@ RED = '\033[91m'
 END = '\033[0m'
 
 
-class BrutForce():
-    def lire_fichier(fichier):
-        with open(fichier, 'r') as csvfile:
-            fichier = csv.reader(csvfile, delimiter=',')
-            next(fichier)
-            for ligne in fichier:
-                if int(ligne[1]) > 0 and int(ligne[2]):
-                    liste.append((ligne[0], int(ligne[1]), int(ligne[2]),
-                                  int(ligne[1])*int(ligne[2])/100))
-        return liste
+def lire_fichier(fichier):
+    with open(fichier, 'r') as csvfile:
+        fichier = csv.reader(csvfile, delimiter=',')
+        next(fichier)
+        for ligne in fichier:
+            if int(float(ligne[1])) > 0 and int(float(ligne[2])) > 0:
+                action.append(
+                    (ligne[0], int(float(ligne[1])), int(float(ligne[2])),
+                     int(float(ligne[1])) * int(float(ligne[2]))/100))
+    return action
 
-    def force_brute():
-        global profit
-        for i in range(1, len(liste) + 1):
-            for combinaison in combinations(liste, i):
-                cout_total = sum(int(ligne[1]) for ligne in combinaison)
-                profit_total = sum(float(ligne[3]) for ligne in combinaison)
-                if cout_total <= budget and profit_total > profit:
-                    combinaisons = combinaison
-                    profit = profit_total
-        cout_total = sum(int(ligne[1]) for ligne in combinaisons)
-        return combinaisons, profit, cout_total
+def force_brute():
+    global profit
+    for i in range(1, len(action) + 1):
+        for combinaison in combinations(action, i):
+            cout_total = sum(int(ligne[1]) for ligne in combinaison)
+            profit_total = sum(float(ligne[3]) for ligne in combinaison)
+            if cout_total <= budget and profit_total > profit:
+                combinaisons = combinaison
+                profit = profit_total
+    cout_total = sum(int(ligne[1]) for ligne in combinaisons)
+    return combinaisons, profit, cout_total
 
 
 if __name__ == '__main__':
     start_time = time.time()
-    BrutForce.lire_fichier(fichier)
-    combinaisons, profit, cout_total = BrutForce.force_brute()
+    lire_fichier(fichier)
+    combinaisons, profit, cout_total = force_brute()
     print(BOLD + "\nLes meilleures actions:\n" + END)
     for ligne in combinaisons:
         print(f"\t{ligne[0]}:\tCoût = {ligne[1]} €\tBénéfice = {ligne[3]} €")

@@ -1,21 +1,14 @@
-import csv
+from bruteforce import lire_fichier
 import time
 action = []
 budget = 500
 meilleure_action = []
 fichier = 'action1.csv'
-
-
-def lire_fichier(fichier):
-    with open(fichier, 'r') as csvfile:
-        fichier = csv.reader(csvfile, delimiter=',')
-        next(fichier)
-        for ligne in fichier:
-            if int(float(ligne[1])) > 0 and int(float(ligne[2])) > 0:
-                action.append(
-                    (ligne[0], int(float(ligne[1])), int(float(ligne[2])),
-                     int(float(ligne[1])) * int(float(ligne[2]))/100))
-    return action
+BOLD = '\033[1m'
+YELLOW = '\033[93m'
+CYAN = '\033[96m'
+RED = '\033[91m'
+END = '\033[0m'
 
 
 def optimized(action):
@@ -39,15 +32,16 @@ def optimized(action):
 
 
 if __name__ == '__main__':
-    list_actions = lire_fichier(fichier)
+    action = lire_fichier(fichier)
     start_time = time.time()
     benef, meilleure_action, prix = optimized(action)
     print(f"Les meilleures actions:\n")
     for ligne in meilleure_action:
         print(f"\t{ligne[0]}:\tCoût = {ligne[1]} €\tBénéfice = {ligne[3]} €")
-    print(f"\nMontant total du bénéfice: {int(benef)} €")
-    print(f"\nMontant total: {prix} €")
+    print(BOLD + f"\nMontant total: {YELLOW}{prix} €" + END)
+    nombre = benef
+    print(BOLD + "\nBénéfice total:" + CYAN + "{0:.2f}".format(nombre), "€" + END)
     nombre = time.time()-start_time
-    print(f"\nTemps d'exécution: {0:.2f}".format(nombre).
-          rjust(7), "secondes\n")
-    print(f"Nombre d'actions: {len(meilleure_action)}")
+    print(BOLD + f"\nTemps d'exécution: {RED}{0:.2f}".format(nombre),
+          "secondes\n" + END)
+    print(BOLD + f"Nombre d'actions: {len(meilleure_action)}\n" + END)
