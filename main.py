@@ -1,8 +1,8 @@
-import questionary
-import time
 from bruteforce import force_brute
 from lirefichier import lire_fichier
 from optimized import optimized
+import questionary
+import time
 
 BOLD = '\033[1m'
 YELLOW = '\033[93m'
@@ -20,8 +20,8 @@ if __name__ == "__main__":
         ).ask()
     )
     if reponse == "Brute force":
-        fichier = 'dataset.csv'
         start_time = time.time()
+        fichier = 'dataset.csv'
         combinaisons, profit, cout_total = force_brute(lire_fichier(fichier))
         print(BOLD + "\nLes meilleures actions:\n" + END)
         for ligne in combinaisons:
@@ -31,8 +31,8 @@ if __name__ == "__main__":
             BOLD + f"\nMontant total: {YELLOW}{cout_total} €" + END)
         print(BOLD + f"\nBénéfice total: {CYAN}{profit} €" + END)
         nombre = time.time()-start_time
-        print(BOLD + f"\nTemps d'exécution: {RED}{0:.2f}".format(nombre),
-              "secondes\n" + END)
+        print(BOLD + f"\nTemps d'exécution:  {RED}% .2f" % nombre +
+              " secondes\n" + END)
         print(BOLD + f"Nombre d'actions: {len(combinaisons)}\n" + END)
     if reponse == "Optimized fichier dataset1" or \
             reponse == "Optimized fichier dataset2":
@@ -52,6 +52,6 @@ if __name__ == "__main__":
         print(BOLD + "\nBénéfice total: " + CYAN + "{0:.2f}".format(nombre),
               "€" + END)
         nombre = time.time()-start_time
-        print(BOLD + f"\nTemps d'exécution: {RED}{0:.2f}".format(nombre),
-              "secondes\n" + END)
+        print(BOLD + f"\nTemps d'exécution: {RED}% .2f" % nombre +
+              " secondes\n" + END)
         print(BOLD + f"Nombre d'actions: {len(meilleure_action)}\n" + END)

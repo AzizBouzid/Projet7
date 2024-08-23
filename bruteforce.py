@@ -1,12 +1,11 @@
 from itertools import combinations
 
 budget = 500
-profit = 0
 combinaisons = []
 
 
 def force_brute(action):
-    global profit
+    profit = 0
     for i in range(1, len(action) + 1):
         for combinaison in combinations(action, i):
             cout_total = sum(int(ligne[1]) for ligne in combinaison)
