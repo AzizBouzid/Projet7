@@ -1,6 +1,7 @@
 import questionary
 import time
-from bruteforce import force_brute, lire_fichier
+from bruteforce import force_brute
+from lirefichier import lire_fichier
 from optimized import optimized
 
 BOLD = '\033[1m'
@@ -21,8 +22,7 @@ if __name__ == "__main__":
     if reponse == "Brute force":
         fichier = 'dataset.csv'
         start_time = time.time()
-        lire_fichier(fichier)
-        combinaisons, profit, cout_total = force_brute()
+        combinaisons, profit, cout_total = force_brute(lire_fichier(fichier))
         print(BOLD + "\nLes meilleures actions:\n" + END)
         for ligne in combinaisons:
             print(

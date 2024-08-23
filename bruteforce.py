@@ -1,25 +1,11 @@
-import csv
 from itertools import combinations
 
 budget = 500
 profit = 0
-action = []
 combinaisons = []
 
 
-def lire_fichier(fichier):
-    with open(fichier, 'r') as csvfile:
-        fichier = csv.reader(csvfile, delimiter=',')
-        next(fichier)
-        for ligne in fichier:
-            if int(float(ligne[1])) > 0 and int(float(ligne[2])) > 0:
-                action.append(
-                    (ligne[0], int(float(ligne[1])), int(float(ligne[2])),
-                     int(float(ligne[1])) * int(float(ligne[2]))/100))
-    return action
-
-
-def force_brute():
+def force_brute(action):
     global profit
     for i in range(1, len(action) + 1):
         for combinaison in combinations(action, i):
