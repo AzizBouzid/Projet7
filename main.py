@@ -16,9 +16,11 @@ if __name__ == "__main__":
         questionary.rawselect(
             "Faites votre choix",
             choices=["Brute force", "Optimized fichier dataset1",
-                     "Optimized fichier dataset2"],
+                     "Optimized fichier dataset2", "Quitter"],
         ).ask()
     )
+    if reponse == "Quitter":
+        exit()
     if reponse == "Brute force":
         start_time = time.time()
         fichier = 'dataset.csv'
@@ -42,16 +44,15 @@ if __name__ == "__main__":
             fichier = 'dataset2.csv'
         action = lire_fichier(fichier)
         start_time = time.time()
-        benef, meilleure_action, prix = optimized(action)
+        benefice, meilleure_action, prix, portefeuille = optimized(action)
+        print(BOLD, "\nNombre d'actions traitées: ", portefeuille)
         print(BOLD + "\nLes meilleures actions:\n" + END)
         for ligne in meilleure_action:
             print(
                 f"\t{ligne[0]}:\tCoût = {ligne[1]} €\tBénéfice = {ligne[3]} €")
         print(BOLD + f"\nMontant total: {YELLOW}{prix} €" + END)
-        nombre = benef
-        print(BOLD + "\nBénéfice total: " + CYAN + "{0:.2f}".format(nombre),
-              "€" + END)
-        nombre = time.time()-start_time
-        print(BOLD + f"\nTemps d'exécution: {RED}% .2f" % nombre +
-              " secondes\n" + END)
+        benef = round(benefice, 2)
+        print(BOLD + f"\nBénéfice total: {CYAN}{benef} €" + END)
+        nombre = round(time.time()-start_time)
+        print(BOLD + f"\nTemps d'exécution: {RED}{nombre} secondes\n" + END)
         print(BOLD + f"Nombre d'actions: {len(meilleure_action)}\n" + END)

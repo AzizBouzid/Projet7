@@ -21,4 +21,5 @@ def optimized(action):
             w -= action[n - 1][1]
         n -= 1
     prix = sum([action[1] for action in meilleure_action])
-    return table[-1][-1], meilleure_action, prix
+    portefeuille = len(action)
+    return table[-1][-1], meilleure_action, prix, portefeuille

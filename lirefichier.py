@@ -7,8 +7,10 @@ def lire_fichier(fichier):
         fichier = csv.reader(csvfile, delimiter=',')
         next(fichier)
         for ligne in fichier:
-            if int(float(ligne[1])) > 0 and int(float(ligne[2])) > 0:
-                action.append(
-                    (ligne[0], int(float(ligne[1])), int(float(ligne[2])),
-                     int(float(ligne[1])) * int(float(ligne[2]))/100))
+            name = ligne[0]
+            price = int(float(ligne[1]))
+            profit = float(ligne[2])
+            benefice = round((price * profit) / 100, 2)
+            if price > 0 and profit > 0:
+                action.append((name, price, profit, benefice))
     return action
