@@ -53,6 +53,6 @@ if __name__ == "__main__":
         print(BOLD + f"\nMontant total: {YELLOW}{prix} €" + END)
         benef = round(benefice, 2)
         print(BOLD + f"\nBénéfice total: {CYAN}{benef} €" + END)
-        nombre = round(time.time()-start_time)
+        nombre = round(time.time()-start_time, 2)
         print(BOLD + f"\nTemps d'exécution: {RED}{nombre} secondes\n" + END)
         print(BOLD + f"Nombre d'actions: {len(meilleure_action)}\n" + END)
